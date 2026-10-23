@@ -15,8 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from django.http import HttpResponse
 
 
@@ -25,36 +26,13 @@ def home(request):
         <h1>Welcome to TrustVault</h1>
         <h2>Secure Document Management System</h2>
         <p>Store and manage your documents securely.</p>
-    """)
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', home, name='home'),
-]
-from django.contrib import admin
-from django.urls import path, include
-from django.http import HttpResponse
-
-def home(request):
-    return HttpResponse("""
-        <h1>Welcome to TrustVault</h1>
-        <p>Secure Document Management System</p>
         <p><a href="/documents/upload/">Upload a Document</a></p>
     """)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('documents/', include('documents.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('', home, name='home'),
 ]
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("documents/", include("documents.urls")),
-]
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("documents/", include("documents.urls")),
-    path("accounts/", include("django.contrib.auth.urls")),
-]
-
-
