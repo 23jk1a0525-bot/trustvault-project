@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault - Secure Document Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            margin: 0;
+            color: #243247;
+        }
+        header {
+            background: #173b67;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 35px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #ccd5df;
+        }
+        .upload-box {
+            background: #f4f8fc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        button, .download {
+            background: #176b50;
+            color: white;
+            padding: 9px 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .delete {
+            background: #b83232;
+        }
+        li {
+            padding: 12px 0;
+            border-bottom: 1px solid #e1e7ed;
+            overflow-wrap: anywhere;
+        }
+        .download {
+            display: inline-block;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔐 TrustVault</h1>
+        <p>Secure Document Management System</p>
+        
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+    </header>
+
+    <div class="container">
+        <h2>Upload Your Document</h2>
+
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+        
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="file" required>
+    <button type="submit">Upload Document</button>
+</form>
+
+{% if message %}
+    <p>{{ message }}</p>
+{% endif %}
+
+
+<h2>Uploaded Documents</h2>
+
+{% for document in documents %}
+    <div>
+        {{ document.title }}
+
+        <a href="{% url 'download_document' document.id %}">
+            Download
+        </a>
+
+        <form method="POST"
+              action="{% url 'delete_document' document.id %}"
+              style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+
+        <form method="POST"
+              action="{% url 'share_document' document.id %}">
+            {% csrf_token %}
+            <input type="text" name="username"
+                   placeholder="Enter username to share with" required>
+            <button type="submit">Share</button>
+        </form>
+    </div>
+{% empty %}
+    <p>No documents uploaded yet.</p>
+{% endfor %}
+
+<hr>
+<h2>Documents Shared With Me</h2>
+
+{% for document in shared_documents %}
+    <p>
+        {{ document.title }}
+        <a href="{% url 'download_document' document.id %}">
+            Download
+        </a>
+    </p>
+{% empty %}
+    <p>No documents have been shared with you yet.</p>
+{% endfor %}
+
+        
+
+        
+    
+
+
+
+                        
+
+
+
+
+                        
+
+
+
+                    
+                    
+                
+    </div>
+    
+<hr>
+
+<div style="text-align: center; margin: 25px;">
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
+</body>
+</html>
