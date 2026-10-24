@@ -6,6 +6,8 @@ set -o errexit
 pip install -r requirements.txt
 python manage.py migrate
 
+
+
 python manage.py shell -c "
 import os
 from django.contrib.auth import get_user_model
@@ -19,10 +21,10 @@ user, created = User.objects.get_or_create(
     defaults={'is_staff': True, 'is_superuser': True}
 )
 
-if created:
-    user.set_password(password)
-    user.save()
-elif not user.check_password(password):
-    print('Existing account found; password was not changed.')
-"
+user.set_password(password)
+user.is_staff = True
+user.is_superuser = True
+user.save()
 
+print('Admin account configured successfully.')
+"
