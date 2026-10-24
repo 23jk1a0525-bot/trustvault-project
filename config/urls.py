@@ -19,6 +19,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
+from documents.views import signup
 
 
 def home(request):
@@ -35,4 +36,5 @@ urlpatterns = [
     path('documents/', include('documents.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', home, name='home'),
+    path("accounts/signup/", signup, name="signup"),
 ]
